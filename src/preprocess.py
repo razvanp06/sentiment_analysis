@@ -39,8 +39,12 @@ def doc_to_tokens(doc, use_lemma=True, stop_words=None):
 
 
 def predict(text, nlp, vectorizer, model):
+	if not text or not text.strip():
+		return None
 	doc = nlp(normalize(text))
 	lemmas = doc_to_tokens(doc, use_lemma=True)
+	if not lemmas:
+		return None
 	X = vectorizer.transform([lemmas])
 	proba = model.predict_proba(X)[0]
 	return {'negativ': float(proba[0]), 'pozitiv': float(proba[1])}
